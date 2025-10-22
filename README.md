@@ -1,64 +1,61 @@
-# Oh My Zsh - Clean Branches 插件
+# Oh My Zsh - Clean Branches Plugin
 
-一个简单而强大的 Oh My Zsh 插件，用于清理已在远程仓库中删除的本地分支。它利用 `fzf` 提供了一个交互式界面，让你可以一次性选择并删除多个分支。
+[English](./README.md) | [中文](./README.zh-CN.md)
 
-## 功能
+A simple but powerful Oh My Zsh plugin that helps you clean up local branches that have been removed from the remote repository. It provides an interactive way to select and delete multiple branches at once, using the power of `fzf`.
 
-当团队协作时，远程仓库中已经合并或删除的分支，在本地通常还会保留。随着时间推移，本地会积累大量无用的分支，导致分支列表混乱。
+## Why use this?
 
-此插件可以帮你快速找到这些“过时”的本地分支，并以交互方式安全地删除它们。
+If you work in a team with a lot of branches, your local repository can get cluttered with old branches that have already been merged and deleted on the remote. This plugin makes it easy to find and remove these stale branches, keeping your local workspace tidy.
 
-## 安装
+## Installation
 
-1.  **克隆此仓库** 到你的 Oh My Zsh 自定义插件目录：
+1.  **Clone this repository** into your Oh My Zsh custom plugins directory:
 
     ```bash
-    git clone https://github.com/your-username/ohmyzsh-cleanbranches.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/cleanbranches
+    git clone https://github.com/wu9o/ohmyzsh-cleanbranches.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/cleanbranches
     ```
-    > 请记得将 `your-username` 替换为你的 GitHub 用户名。
 
-2.  **添加插件** 到你的 `~/.zshrc` 文件中的 `plugins` 数组里：
+2.  **Add the plugin** to the `plugins` array in your `~/.zshrc` file:
 
     ```zsh
     plugins=(... cleanbranches)
     ```
 
-3.  **重启终端** 或重新加载 `~/.zshrc` 文件使配置生效：
+3.  **Restart your terminal** or source your `~/.zshrc` file to apply the changes:
 
     ```bash
     source ~/.zshrc
     ```
 
-## 使用方法
+## Usage
 
-1.  在你的终端中，进入任意一个 Git 仓库目录，然后运行 `gprune` 命令：
+1.  Run the `gprune` command in your terminal:
 
     ```bash
     gprune
     ```
 
-2.  插件会自动抓取远程最新状态，并列出所有在远程已被删除的本地分支。
+2.  You will be presented with a list of local branches that are no longer on the remote.
 
-3.  使用 `TAB` 键来多选你想要删除的分支。
+3.  Use the `TAB` key to select the branches you want to delete.
 
-4.  按 `Enter` 键确认选择。
+4.  Press `Enter` to confirm your selection.
 
-5.  在执行删除前，会有一个最终的确认提示。
+5.  You will be asked for a final confirmation before the branches are deleted.
 
-## 依赖
+## Dependencies
 
-本插件依赖 `fzf`。请确保你的系统已安装 `fzf`。
-
-你可以通过包管理器来安装，例如：
+This plugin requires `fzf` to be installed on your system. You can install it with your favorite package manager, for example:
 
 ```bash
-# 在 macOS 上使用 Homebrew
+# Using Homebrew on macOS
 brew install fzf
 
-# 在 Debian/Ubuntu 上使用 APT
+# Using APT on Debian/Ubuntu
 sudo apt-get install fzf
 ```
 
-## 许可证
+## License
 
-本项目基于 MIT 许可证。
+This project is licensed under the MIT License.
