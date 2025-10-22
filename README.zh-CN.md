@@ -1,65 +1,62 @@
-# Oh My Zsh - Clean Branches 插件
+# Oh My Zsh 的 Clean Branches 插件
 
-[English](./README.md) | [中文](./README.zh-CN.md)
+一个强大的、统一的、交互式的 Git 分支清理工具。
 
-一个简单而强大的 Oh My Zsh 插件，用于清理已在远程仓库中删除的本地分支。它利用 `fzf` 提供了一个交互式界面，让你可以一次性选择并删除多个分支。
+本插件提供了一个单一命令 `gprune`，用于查找所有可以被安全删除的本地 Git 分支，包括：
+- **[stale]**: 远程已经不存在的本地分支。
+- **[merged]**: 已经完全合并到主分支 (`main` 或 `master`) 的分支。
+- **[WIP - unmerged]**: 仅在本地存在、从未推送且未合并的分支。**(请谨慎处理!)**
 
-## 功能
+它使用 `fzf` 提供了一个美观的交互式界面，让你能轻松地一次性选择并删除多个分支。
 
-当团队协作时，远程仓库中已经合并或删除的分支，在本地通常还会保留。随着时间推移，本地会积累大量无用的分支，导致分支列表混乱。
+## 先决条件
 
-此插件可以帮你快速找到这些“过时”的本地分支，并以交互方式安全地删除它们。
+- [Oh My Zsh](https://ohmyz.sh/)
+- [fzf](https://github.com/junegunn/fzf) (例如: `brew install fzf`)
 
 ## 安装
 
-1.  **克隆此仓库** 到你的 Oh My Zsh 自定义插件目录：
-
-    ```bash
+1.  克隆本仓库到你的 Oh My Zsh 自定义插件目录：
+    ```sh
     git clone https://github.com/wu9o/ohmyzsh-cleanbranches.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/cleanbranches
     ```
 
-2.  **添加插件** 到你的 `~/.zshrc` 文件中的 `plugins` 数组里：
-
+2.  将插件添加到你的 `~/.zshrc` 文件中的插件列表里：
     ```zsh
-    plugins=(... cleanbranches)
+    plugins=(
+        # 其他插件...
+        cleanbranches
+    )
     ```
 
-3.  **重启终端** 或重新加载 `~/.zshrc` 文件使配置生效：
-
-    ```bash
+3.  重启你的终端，或重新加载 `~/.zshrc` 文件：
+    ```sh
     source ~/.zshrc
     ```
 
 ## 使用方法
 
-1.  在你的终端中，进入任意一个 Git 仓库目录，然后运行 `gprune` 命令：
+进入任意一个 Git 仓库，然后运行命令：
 
-    ```bash
-    gprune
-    ```
-
-2.  插件会自动抓取远程最新状态，并列出所有在远程已被删除的本地分支。
-
-3.  使用 `TAB` 键来多选你想要删除的分支。
-
-4.  按 `Enter` 键确认选择。
-
-5.  在执行删除前，会有一个最终的确认提示。
-
-## 依赖
-
-本插件依赖 `fzf`。请确保你的系统已安装 `fzf`。
-
-你可以通过包管理器来安装，例如：
-
-```bash
-# 在 macOS 上使用 Homebrew
-brew install fzf
-
-# 在 Debian/Ubuntu 上使用 APT
-sudo apt-get install fzf
+```sh
+gprune
 ```
 
-## 许可证
+一个 `fzf` 交互式窗口将会打开，列出所有可被删除的分支及其状态。
 
-本项目基于 MIT 许可证。
+- 使用 `TAB` 键选择一个或多个分支。
+- 按 `Enter` 键确认你的选择。
+- 在执行删除前，会有一个最终的确认提示。
+
+![gprune 运行截图](https://link-to-your-screenshot.com/image.png) <!-- 你可以稍后添加截图 -->
+
+## 工作原理
+
+`gprune` 命令会执行以下步骤：
+1.  使用 `git fetch --prune` 获取最新的远程状态。
+2.  自动识别你的主分支 (`main` 或 `master`)。
+3.  查找三类分支：
+    - **stale**: 对比本地分支和已“消失”的远程分支。
+    - **merged**: 使用 `git branch --merged` 查找其工作已完全包含在主分支中的分支。这也包括那些仅在本地创建然后被合并的分支。
+    - **WIP - unmerged**: 查找仅在本地存在且未合并的分支。删除这类分支可能会导致工作永久丢失。
+4.  将一个去重后、带有清晰标记的分支列表呈现给你，供你选择。
